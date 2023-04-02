@@ -1,0 +1,24 @@
+# environment.yml
+channels:
+  - pytorch
+  - k2-fsa
+  - kaldifeat
+  - conda-forge
+dependencies:
+  - python=3.8
+  - cpuonly
+  - pytorch=1.13
+  - torchaudio=0.13
+  - setuptools
+  - pip
+  - kaldifeat
+  - websockets
+  - sentencepiece>=0.1.96
+  - numpy
+  - k2
+platforms:
+  - linux-64
+  # - osx-64
+  # - win-64
+  # - osx-arm64  # For Apple Silicon, e.g. M1/M2
+  # - linux-aarch64  # aka arm64, use for Docker on Apple Silicon
