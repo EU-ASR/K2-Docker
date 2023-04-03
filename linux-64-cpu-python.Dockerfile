@@ -34,7 +34,6 @@ RUN export CC=gcc && export CXX=g++ \
 RUN find /opt/env -name '*.a' -delete && \
     rm -rf /opt/env/conda-meta && \
     rm -rf /opt/env/include && \
-    rm /opt/env/lib/libpython3.8.so.1.0 && \
     find /opt/env -name '__pycache__' -type d -exec rm -rf '{}' '+' && \
     rm -rf /env/lib/python3.8/site-packages/pip /env/lib/python3.8/idlelib /env/lib/python3.8/ensurepip \
       /opt/env/bin/x86_64-conda-linux-gnu-ld \
