@@ -18,13 +18,13 @@ RUN mamba create -p /opt/env --copy --file /locks/conda-linux-64.lock \
 
 WORKDIR /workspace
 
-# TODO: Refactor this to not clone the repository
-RUN git clone --depth 1 https://github.com/k2-fsa/icefall.git
-ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
-# https://github.com/k2-fsa/icefall/issues/674
-ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
+# TODO: What is icefall for?
+# # TODO: Refactor this to not clone the repository
+# RUN git clone --depth 1 https://github.com/k2-fsa/icefall.git
+# ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
+# # https://github.com/k2-fsa/icefall/issues/674
+# ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
 
-# TODO: Why cloning repo? There should be a better way!
 COPY . ./sherpa
 WORKDIR /workspace/sherpa
 RUN export CC=gcc && export CXX=g++ \
@@ -66,9 +66,9 @@ COPY --from=conda /opt/env /opt/env
 COPY --from=conda /workspace/sherpa/build/sherpa/bin /app/bin
 
 ENV PATH=$PATH:/opt/env/bin:/app/bin
-ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
+# ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
 # https://github.com/k2-fsa/icefall/issues/674
-ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
+# ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
 
 # Put debug tools in bash_history for quick access
 RUN echo \
