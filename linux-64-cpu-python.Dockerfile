@@ -12,11 +12,6 @@ RUN export DEBIAN_FRONTEND="noninteractive" TZ="Europe/Prague" \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Install python dependencies
-COPY conda-linux-64.lock /locks/conda-linux-64.lock
-RUN mamba create -p /opt/env --copy --file /locks/conda-linux-64.lock \
-    && conda clean -afy
-
 WORKDIR /workspace
 
 # # TODO: Refactor this to not clone the repository
@@ -24,6 +19,11 @@ RUN git clone --depth 1 https://github.com/k2-fsa/icefall.git
 ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
 # https://github.com/k2-fsa/icefall/issues/674
 ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
+
+# Install python dependencies
+COPY conda-linux-64.lock /locks/conda-linux-64.lock
+RUN mamba create -p /opt/env --copy --file /locks/conda-linux-64.lock \
+    && conda clean -afy
 
 COPY . ./sherpa
 WORKDIR /workspace/sherpa
