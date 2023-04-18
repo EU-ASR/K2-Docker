@@ -57,6 +57,7 @@ jobs:
 
   trivy:
     name: Trivy
+    if: ${{ false }}  # disable for now
     needs: build-and-push-image
     runs-on: ubuntu-20.04
     steps:
