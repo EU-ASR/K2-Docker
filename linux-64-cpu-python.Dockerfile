@@ -30,19 +30,19 @@ WORKDIR /workspace/sherpa
 RUN export CC=gcc && export CXX=g++ \
     && conda run -p /opt/env python setup.py install --verbose
 
-# Clean up
-RUN find /opt/env -name '*.a' -delete && \
-    rm -rf /opt/env/conda-meta && \
-    rm -rf /opt/env/include && \
-    find /opt/env -name '__pycache__' -type d -exec rm -rf '{}' '+' && \
-    rm -rf /env/lib/python3.8/site-packages/pip /env/lib/python3.8/idlelib /env/lib/python3.8/ensurepip \
-      /opt/env/bin/x86_64-conda-linux-gnu-ld \
-      /opt/env/bin/x86_64-conda_cos6-linux-gnu-ld \
-      /opt/env/share/terminfo && \
-    find /opt/env/lib/python3.8/distutils/ -name 'tests' -type d -exec rm -rf '{}' '+' && \
-    find /opt/env/lib/python3.8/site-packages/numpy -name 'tests' -type d -exec rm -rf '{}' '+' && \
-    find /opt/env/lib/python3.8/site-packages -name '*.pyx' -delete && \
-    rm -rf /opt/env/lib/python3.8/site-packages/uvloop/loop.c
+# # Clean up
+# RUN find /opt/env -name '*.a' -delete && \
+#     rm -rf /opt/env/conda-meta && \
+#     rm -rf /opt/env/include && \
+#     find /opt/env -name '__pycache__' -type d -exec rm -rf '{}' '+' && \
+#     rm -rf /env/lib/python3.8/site-packages/pip /env/lib/python3.8/idlelib /env/lib/python3.8/ensurepip \
+#       /opt/env/bin/x86_64-conda-linux-gnu-ld \
+#       /opt/env/bin/x86_64-conda_cos6-linux-gnu-ld \
+#       /opt/env/share/terminfo && \
+#     find /opt/env/lib/python3.8/distutils/ -name 'tests' -type d -exec rm -rf '{}' '+' && \
+#     find /opt/env/lib/python3.8/site-packages/numpy -name 'tests' -type d -exec rm -rf '{}' '+' && \
+#     find /opt/env/lib/python3.8/site-packages -name '*.pyx' -delete && \
+#     rm -rf /opt/env/lib/python3.8/site-packages/uvloop/loop.c
 
 # Primary container
 # Distroless version
