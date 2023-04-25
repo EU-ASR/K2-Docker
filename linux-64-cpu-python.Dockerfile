@@ -55,7 +55,7 @@ FROM debian:stable-slim
 RUN export DEBIAN_FRONTEND="noninteractive" TZ="Europe/Prague" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-      git git-lfs  \
+      git git-lfs ca-certificates  \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
