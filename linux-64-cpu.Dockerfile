@@ -61,11 +61,12 @@ RUN export DEBIAN_FRONTEND="noninteractive" TZ="Europe/Prague" \
 
 WORKDIR /app/bin
 COPY LICENSE /app
-COPY ./sherpa/bin/web/ /app/web/
+COPY ./sherpa/bin/web/ /app/sherpa/web/
 COPY --from=conda /opt/env /opt/env
-COPY --from=conda /workspace/sherpa/build/sherpa/bin /app/bin
+COPY --from=conda /workspace/sherpa/build/sherpa/bin /app/sherpa/bin
 
-ENV PATH=$PATH:/opt/env/bin:/app/bin
+# Adding sherpa binaries to PATH
+ENV PATH=$PATH:/opt/env/bin:/app/sherpa/bin
 # ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
 # https://github.com/k2-fsa/icefall/issues/674
 # ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
