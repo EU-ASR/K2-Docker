@@ -59,7 +59,7 @@ RUN export DEBIAN_FRONTEND="noninteractive" TZ="Europe/Prague" \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app/bin
+WORKDIR /app/sherpa
 COPY LICENSE /app
 COPY ./sherpa/bin/web/ /app/sherpa/web/
 COPY --from=conda /opt/env /opt/env
