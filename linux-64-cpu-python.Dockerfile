@@ -61,6 +61,7 @@ RUN export DEBIAN_FRONTEND="noninteractive" TZ="Europe/Prague" \
 
 WORKDIR /app/sherpa
 COPY LICENSE /app
+COPY ./sherpa/bin/web/ /app/web/
 COPY --from=conda /opt/env /opt/env
 COPY --from=conda /workspace/sherpa/ /app/sherpa/
 COPY --from=conda /workspace/icefall/ /app/icefall/
