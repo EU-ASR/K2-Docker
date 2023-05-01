@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  sherpa:
+    image: "ghcr.io/andyy42/sherpa:${SHERPA_TAG}"
+    entrypoint:
+      - ${SHERPA_COMMAND}
+      - --port=6006
+      - --use-gpu=false
+      - --nn-model=/opt/models/${SHERPA_MODEL_NAME}/${SHERPA_NN_MODEL_PATH}
+      - --tokens=/opt/models/${SHERPA_MODEL_NAME}/${SHERPA_TOKENS_PATH}
+      - --decoding-method=greedy_search
+      - --log-file=/var/log/sherpa.log
+      - --doc-root=/app/sherpa/web/
+      - --num-io-threads=3
+      - --num-work-threads=5
+      - --max-batch-size=5
+      - ${SHERPA_COMMAND_EXTRA_ARGS:---}
+    working_dir: /app/sherpa
+    ports:
+      - ${SHERPA_PORT}:6006
+      #- 6006:6006
+    volumes:
+      - ${SHERPA_MODEL_PATH}:/opt/models/
+
+# For GPU see: https://docs.docker.com/compose/gpu-support/
