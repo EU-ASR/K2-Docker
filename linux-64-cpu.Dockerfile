@@ -51,22 +51,28 @@ RUN find /opt/env -name '*.a' -delete && \
 # Debug version
 FROM debian:stable-slim
 
+WORKDIR /app/sherpa
+
+# Copy build data
+COPY --from=conda /opt/env /opt/env
+COPY --from=conda /workspace/sherpa/build/sherpa/bin /app/sherpa/bin
+# Adding sherpa binaries to PATH
+ENV PATH=$PATH:/opt/env/bin:/app/sherpa/bin
+
+COPY LICENSE /app
+COPY ./sherpa/bin/web/ /app/sherpa/web/
+
+# Volume for models data
+VOLUME /opt/models/
+
 # Install build dependencies
 RUN export DEBIAN_FRONTEND="noninteractive" TZ="Europe/Prague" \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-      git git-lfs  \
+      git git-lfs curl procps \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app/sherpa
-COPY LICENSE /app
-COPY ./sherpa/bin/web/ /app/sherpa/web/
-COPY --from=conda /opt/env /opt/env
-COPY --from=conda /workspace/sherpa/build/sherpa/bin /app/sherpa/bin
-
-# Adding sherpa binaries to PATH
-ENV PATH=$PATH:/opt/env/bin:/app/sherpa/bin
 # ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
 # https://github.com/k2-fsa/icefall/issues/674
 # ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
