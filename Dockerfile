@@ -1,4 +1,4 @@
-from nvcr.io/nvidia/pytorch:22.12-py3
+FROM nvcr.io/nvidia/pytorch:22.12-py3
 # https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html
 # Please choose previous pytorch:xx.xx if you encounter cuda driver mismatch issue
 RUN pip3 install torchaudio
@@ -19,10 +19,14 @@ ENV PYTHONPATH "${PYTHONPATH}:/workspace/icefall"
 # https://github.com/k2-fsa/icefall/issues/674
 ENV PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION "python"
 
-RUN git clone https://github.com/k2-fsa/sherpa.git && \
-    cd sherpa && \
+COPY . ./sherpa
+#RUN git clone https://github.com/k2-fsa/sherpa.git && \
+RUN  cd sherpa && \
     pip3 install -r ./requirements.txt && \
     python3 setup.py bdist_wheel && \
     pip3 install ./dist/k2_sherpa-*.whl --force
 
+WORKDIR /workspace/sherpa
 
+# Default for http or websocket server. TODO: There might be more ports!
+EXPOSE 6006

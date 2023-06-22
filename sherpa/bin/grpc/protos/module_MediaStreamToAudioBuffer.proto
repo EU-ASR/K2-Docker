@@ -1,0 +1,68 @@
+// EU ASR license header
+
+// EU ASR internal module - MediaStreamToAudioBuffer
+// input stream of bytes
+// output stream of Status
+// this module connects to a module which recieves stream of AudioBuffer
+// this module converts the input stream of whatever into stream of PCM audio
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "eu.europe.asr.asrcore";
+option java_outer_classname = "ModuleASRCoreProto";
+option objc_class_prefix = "M_ASRCore";
+
+package module_media_stream_to_audio_buffer;
+
+// Interface exported by the server.
+service Module_MediaStreamToAudioBuffer {
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of Buffers sent from input interface modules,
+  // while sending back stream of PCM buffer internally compatibile to an ASRCore module for example.
+
+  rpc Configure(Configuration) returns (ConfigurationAccepted) {}
+
+  rpc ConvertMedia(stream DataBuffer) returns (stream Status) {}
+}
+
+// ConfigurationAccepted indicates if the configuration was accpted or not including status message
+message ConfigurationAccepted {
+  bool accepted = 1;
+  string message = 2;
+}
+
+// Module configuration item in form Name = Value. 
+message ConfigurationItem {
+  string name = 1;
+  string value = 2;
+}
+  
+// Module configuration of array of items -> Name = Value
+message Configuration {
+  repeated ConfigurationItem items = 1;
+}
+
+// TimeStamp is indication time in seconds from the beginning of the stream
+message TimeStamp {
+  float timestamp = 1;
+}
+
+// Buffer is a buffer of raw data.
+message DataBuffer {
+  MetaData metadata = 1;
+  bytes data = 2;
+}
+
+// Metadata has timestamp and a description of a source (useful when an interleaving happens)
+message MetaData {
+  TimeStamp timestamp = 1;
+  string source = 2;  
+}
+
+// Status is message returned by the function. We expect this to be used mainly for debug.
+message Status {
+  TimeStamp timestamp = 1;
+  string message = 2;
+}

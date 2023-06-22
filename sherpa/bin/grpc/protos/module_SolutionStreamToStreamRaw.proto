@@ -1,0 +1,72 @@
+// EU ASR license header
+
+// EU ASR iterface module - StreamToStream
+// input stream of bytes (media stream) - from client
+// output stream of bytes (transcription stream) - no client
+// this module connects to an internal module which recieves stream of bytes
+// this module recieves a stream of recognized transcription in raw format (JSON for example) from an internal module and forwards it back to client
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "eu.europe.asr.asrcore";
+option java_outer_classname = "ModuleASRCoreProto";
+option objc_class_prefix = "M_ASRCore";
+
+package module_solution_stream_to_stream_raw;
+
+// Interface exported by the server.
+service Module_SolutionStreamToStreamRaw {
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of data (media) sent from external client,
+  // while sending back stream of data (transcription) to the external client.
+
+  rpc Configure(Configuration) returns (ConfigurationAccepted) {}
+
+  rpc TranscribeStreamToRaw(stream DataBuffer) returns (stream DataBuffer) {}
+
+  rpc ExportStreamRaw(stream DataBuffer) returns (stream Status) {}
+}
+
+// ConfigurationAccepted indicates if the configuration was accpted or not including status message
+message ConfigurationAccepted {
+  bool accepted = 1;
+  string message = 2;
+}
+
+// Module configuration item in form Name = Value. 
+message ConfigurationItem {
+  string name = 1;
+  string value = 2;
+}
+  
+// Module configuration of array of items -> Name = Value
+message Configuration {
+  repeated ConfigurationItem items = 1;
+}
+
+// Buffer is a buffer of raw data.
+message DataBuffer {
+  MetaData metadata = 1;
+  bytes data = 2;
+}
+
+// Metadata has timestamp and a description of a source (useful when an interleaving happens)
+message MetaData {
+  TimeStamp timestamp = 1;
+  string source = 2;  
+}
+
+// TimeStamp is indication time in seconds from the beginning of the stream
+message TimeStamp {
+  float timestamp = 1;
+}
+
+// Status is message returned by the function. We expect this to be used mainly for debug.
+message Status {
+  TimeStamp timestamp = 1;
+  string message = 2;
+}
+
+
