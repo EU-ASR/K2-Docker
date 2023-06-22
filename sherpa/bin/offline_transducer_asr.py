@@ -146,7 +146,9 @@ def add_model_args(parser: argparse.ArgumentParser):
         "--sample-rate",
         type=int,
         default=16000,
-        help="Sample rate of the data used to train the model",
+        help="Sample rate of the data used to train the model. "
+        "Caution: If your input sound files have a different sampling rate, "
+        "we will do resampling inside",
     )
 
     parser.add_argument(
@@ -308,7 +310,7 @@ def read_sound_files(
     return ans
 
 
-def create_recognizer(args):
+def create_recognizer(args) -> sherpa.OfflineRecognizer:
     feat_config = sherpa.FeatureConfig()
 
     feat_config.fbank_opts.frame_opts.samp_freq = args.sample_rate
@@ -348,7 +350,7 @@ def main():
     torch.set_num_interop_threads(args.num_threads)
 
     recognizer = create_recognizer(args)
-    sample_rate = 16000
+    sample_rate = args.sample_rate
 
     samples: List[torch.Tensor] = read_sound_files(
         args.sound_files,
