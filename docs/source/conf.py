@@ -45,14 +45,15 @@ release = version
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
+    "_ext.rst_roles",
     "recommonmark",
     "sphinx.ext.autodoc",
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
     "sphinx_rtd_theme",
+    "sphinx_tabs.tabs",
     "sphinxcontrib.youtube",
-    "_ext.rst_roles",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -140,4 +141,7 @@ rst_epilog = """
 .. _asio: https://github.com/chriskohlhoff/asio
 .. _boost: https://github.com/boostorg/boost
 .. _NeMo: https://github.com/NVIDIA/NeMo
+.. _CommonVoice: https://commonvoice.mozilla.org
+.. _Zipformer: https://github.com/k2-fsa/icefall/tree/master/egs/librispeech/ASR/pruned_transducer_stateless7_streaming
+.. _VisionFive2: https://www.starfivetech.com/en/site/boards
 """

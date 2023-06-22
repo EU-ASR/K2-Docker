@@ -2,3 +2,6 @@ websockets
 kaldifeat
 sentencepiece>=0.1.96
 numpy
+grpcio==1.54.0
+grpcio-tools==1.54.0
+protobuf==4.22.3

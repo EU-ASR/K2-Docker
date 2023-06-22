@@ -1,0 +1,72 @@
+// EU ASR license header
+
+// EU ASR internal module - asrcore
+// input stream of AudioBuffer
+// output stream of Status
+// this module connects to a module which recieves stream of RecognizedTokens
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "eu.europe.asr.asrcore";
+option java_outer_classname = "ModuleASRCoreProto";
+option objc_class_prefix = "M_ASRCore";
+
+package module_asrcore;
+
+// Interface exported by the server.
+service Module_ASRCore {
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of AudioBuffers sent from input interface modules,
+  // while sending back recognized tokes stream to a output transcript postprocessing modules.
+
+  rpc Configure(Configuration) returns (ConfigurationAccepted) {}
+
+  rpc TranscribeBuffer(stream AudioBuffer) returns (stream Status) {}
+}
+
+// ConfigurationAccepted indicates if the configuration was accpted or not including status message
+message ConfigurationAccepted {
+  bool accepted = 1;
+  string message = 2;
+}
+
+// Module configuration item in form Name = Value. 
+message ConfigurationItem {
+  string name = 1;
+  string value = 2;
+}
+  
+// Module configuration of array of items -> Name = Value
+message Configuration {
+  repeated ConfigurationItem items = 1;
+}
+
+// TimeStamp is indication time in seconds from the beginning of the stream
+message TimeStamp {
+  float timestamp = 1;
+}
+
+// AudioBuffer is array of audio samples.
+message AudioBuffer {
+  MetaData metadata = 1;
+  repeated AudioSample samples = 2;
+}
+
+// AudioSample is single float. Stereo signal is represented by two "independent" streams.
+message AudioSample {  
+  float sample = 1;
+}
+
+// Metadata has timestamp and a description of a source (useful when an interleaving happens)
+message MetaData {
+  TimeStamp timestamp = 1;
+  string source = 2;  
+}
+
+// Status is message returned by the function. We expect this to be used mainly for debug.
+message Status {
+  TimeStamp timestamp = 1;
+  string message = 2;
+}

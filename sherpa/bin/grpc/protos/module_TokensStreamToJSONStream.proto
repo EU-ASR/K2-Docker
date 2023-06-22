@@ -1,0 +1,78 @@
+// EU ASR license header
+
+// EU ASR internal module - transcription_stream_convertor to JSON
+// input stream of RecognizedTokens
+// output stream of Status
+// the module transforms to raw output from ASRCore (array of tokens) into stream on JSON objects
+// the module connects to a module capable to process per sentence JSONs
+
+syntax = "proto3";
+
+//option java_multiple_files = true;
+//option java_package = "eu.europe.asr.asrcore";
+//option java_outer_classname = "ModuleASRCoreProto";
+//option objc_class_prefix = "M_ASRCore";
+
+package module_token_stream_to_JSON_stream;
+
+// Interface exported by the server.
+service Module_TokenSteamToJSONStream {
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of AudioBuffers sent from input interface modules,
+  // while sending back recognized tokes stream to a output transcript postprocessing modules.
+
+  rpc Configure(Configuration) returns (ConfigurationAccepted) {}
+
+  rpc ConvertTokens(stream RecognizedTokens) returns (stream Status) {}
+}
+
+
+// ConfigurationAccepted indicates if the configuration was accpted or not including status message
+message ConfigurationAccepted {
+  bool accepted = 1;
+  string message = 2;
+}
+
+// Module configuration item in form Name = Value. 
+message ConfigurationItem {
+  string name = 1;
+  string value = 2;
+}
+  
+// Module configuration of array of items -> Name = Value
+message Configuration {
+  repeated ConfigurationItem items = 1;
+}
+
+// TimeStamp is indication time in seconds from the beginning of the stream
+message TimeStamp {
+  float timestamp = 1;
+}
+
+// RecognizedTokens is stream of array of Tokes recognized
+message RecognizedTokens {
+  MetaData metadata = 1;
+  repeated Token tokens = 2;
+}
+
+// Token is basic unit of recognized text
+message Token {
+  TimeStamp from_time = 1;
+  TimeStamp duration = 2;
+  string token = 3;
+  float likelihood = 4;
+  int32 nbest = 5; // placeholder
+}
+
+// Metadata has timestamp and a description of a source (useful when an interleaving happens)
+message MetaData {
+  TimeStamp timestamp = 1;
+  string source = 2;  
+}
+
+// Status is message returned by the function. We expect this to be used mainly for debug.
+message Status {
+  TimeStamp timestamp = 1;
+  string message = 2;
+}

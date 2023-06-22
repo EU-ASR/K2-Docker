@@ -1,0 +1,50 @@
+// Copyright 2015 gRPC authors.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "eu.europe.asr.asrcore";
+option java_outer_classname = "ModuleASRCoreProto";
+option objc_class_prefix = "M_ASRCore";
+
+package module_asrcore;
+
+// Interface exported by the server.
+service Module_ASRCore {
+  // A Bidirectional streaming RPC.
+  //
+  // Accepts a stream of AudioBuffers sent while microphone is active,
+  // while sending back recognized tokes.
+  rpc TranscribeBuffer(stream AudioBuffer) returns (stream RecognizedTokens) {}
+  //rpc TranscribeBuffer(AudioBuffer) returns (stream RecognizedTokens) {}
+}
+
+message Sample {
+  float sample = 1;
+}
+
+message AudioBuffer {
+  repeated Sample samples = 1;
+}
+
+message RecognizedTokens {
+  repeated Token tokens = 1;
+}
+
+message Token {
+  string token = 1;
+  float likelihood = 2;
+}
+
